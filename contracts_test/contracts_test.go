@@ -7,7 +7,7 @@ import (
 	"github.com/eunomie/contracts"
 	"github.com/eunomie/contracts/carray"
 	"github.com/eunomie/contracts/cnumber"
-	"github.com/eunomie/contracts/ctype"
+	"github.com/eunomie/contracts/cvar"
 )
 
 func TestRequires_Number(t *testing.T) {
@@ -77,12 +77,12 @@ func TestRequires_Type(t *testing.T) {
 	)
 
 	contracts.Requires(
-		ctype.IsNil(nilFn),
-		ctype.IsNotNil(notNilFn),
-		ctype.IsNotNil(""),
-		ctype.IsNotNil(0),
-		ctype.IsNil(nilStruct),
-		ctype.IsNotNil(notNilStruct),
+		cvar.IsNil(nilFn),
+		cvar.IsNotNil(notNilFn),
+		cvar.IsNotNil(""),
+		cvar.IsNotNil(0),
+		cvar.IsNil(nilStruct),
+		cvar.IsNotNil(notNilStruct),
 	)
 }
 
@@ -100,10 +100,10 @@ func TestRequiresPanic_Type(t *testing.T) {
 	)
 
 	testRequiresPanic(t, []contracts.Check{
-		ctype.IsNil(notNilFn),
-		ctype.IsNotNil(nilFn),
-		ctype.IsNil(notNilStruct),
-		ctype.IsNotNil(nilStruct),
+		cvar.IsNil(notNilFn),
+		cvar.IsNotNil(nilFn),
+		cvar.IsNil(notNilStruct),
+		cvar.IsNotNil(nilStruct),
 	})
 }
 
@@ -189,12 +189,12 @@ func TestEnsure_Type(t *testing.T) {
 	)
 
 	defer contracts.Ensure(
-		ctype.IsNil(nilFn),
-		ctype.IsNotNil(notNilFn),
-		ctype.IsNotNil(""),
-		ctype.IsNotNil(0),
-		ctype.IsNil(nilStruct),
-		ctype.IsNotNil(notNilStruct),
+		cvar.IsNil(nilFn),
+		cvar.IsNotNil(notNilFn),
+		cvar.IsNotNil(""),
+		cvar.IsNotNil(0),
+		cvar.IsNil(nilStruct),
+		cvar.IsNotNil(notNilStruct),
 	)
 }
 
@@ -212,10 +212,10 @@ func TestEnsurePanic_Type(t *testing.T) {
 	)
 
 	testEnsurePanic(t, []contracts.Check{
-		ctype.IsNil(notNilFn),
-		ctype.IsNotNil(nilFn),
-		ctype.IsNil(notNilStruct),
-		ctype.IsNotNil(nilStruct),
+		cvar.IsNil(notNilFn),
+		cvar.IsNotNil(nilFn),
+		cvar.IsNil(notNilStruct),
+		cvar.IsNotNil(nilStruct),
 	})
 }
 
