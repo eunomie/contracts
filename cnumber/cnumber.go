@@ -85,18 +85,6 @@ func IsStrictlyBetweenFunc[T Number](min, max T) func(T) contracts.Check {
 	}
 }
 
-func IsLessOrEqual[T Number](v, max T) contracts.Check {
-	return IsLessOrEqualFunc(max)(v)
-}
-
-func IsLessOrEqualFunc[T Number](max T) func(T) contracts.Check {
-	return func(v T) contracts.Check {
-		return func() (bool, string) {
-			return v <= max, fmt.Sprintf("number should be <= %v but is %v", max, v)
-		}
-	}
-}
-
 func IsLess[T Number](v, max T) contracts.Check {
 	return IsLessFunc(max)(v)
 }
@@ -104,19 +92,19 @@ func IsLess[T Number](v, max T) contracts.Check {
 func IsLessFunc[T Number](max T) func(T) contracts.Check {
 	return func(v T) contracts.Check {
 		return func() (bool, string) {
-			return v < max, fmt.Sprintf("number should be < %v but is %v", max, v)
+			return v <= max, fmt.Sprintf("number should be <= %v but is %v", max, v)
 		}
 	}
 }
 
-func IsGreaterOrEqual[T Number](v, min T) contracts.Check {
-	return IsGreaterOrEqualFunc(min)(v)
+func IsStrictlyLess[T Number](v, max T) contracts.Check {
+	return IsStrictlyLessFunc(max)(v)
 }
 
-func IsGreaterOrEqualFunc[T Number](min T) func(T) contracts.Check {
+func IsStrictlyLessFunc[T Number](max T) func(T) contracts.Check {
 	return func(v T) contracts.Check {
 		return func() (bool, string) {
-			return min <= v, fmt.Sprintf("number should be >= %v but is %v", min, v)
+			return v < max, fmt.Sprintf("number should be < %v but is %v", max, v)
 		}
 	}
 }
@@ -126,6 +114,18 @@ func IsGreater[T Number](v, min T) contracts.Check {
 }
 
 func IsGreaterFunc[T Number](min T) func(T) contracts.Check {
+	return func(v T) contracts.Check {
+		return func() (bool, string) {
+			return min <= v, fmt.Sprintf("number should be >= %v but is %v", min, v)
+		}
+	}
+}
+
+func IsStrictlyGreater[T Number](v, min T) contracts.Check {
+	return IsStrictlyGreaterFunc(min)(v)
+}
+
+func IsStrictlyGreaterFunc[T Number](min T) func(T) contracts.Check {
 	return func(v T) contracts.Check {
 		return func() (bool, string) {
 			return min < v, fmt.Sprintf("number should be > %v but is %v", min, v)

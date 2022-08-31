@@ -9,6 +9,7 @@ import (
 	"github.com/eunomie/contracts"
 	"github.com/eunomie/contracts/carray"
 	"github.com/eunomie/contracts/cnumber"
+	"github.com/eunomie/contracts/cvar"
 )
 
 func SumAngles(values ...int) (res int) {
@@ -16,14 +17,28 @@ func SumAngles(values ...int) (res int) {
 		carray.IsNotEmpty(values),
 		carray.WithEachElement(values,
 			cnumber.IsPositiveFunc[int](),
-			cnumber.IsLessFunc(360)))
+			cnumber.IsStrictlyLessFunc(360)))
 	defer contracts.Ensure(
-		cnumber.IsBetween(res, 0, 360))
+		cnumber.IsBetween(res, 0, 359))
 
 	for _, el := range values {
 		res += el
 	}
 
-	return res % 360
+	res = res % 360
+
+	return
+}
+
+func RotateByQuarter(angle, rotation int) (res int) {
+	contracts.Requires(
+		cnumber.IsBetween(angle, 0, 359),
+		cvar.IsInsideEnum(rotation, 0, 90, 180, 270))
+	defer contracts.Ensure(
+		cnumber.IsBetween(res, 0, 359))
+	
+	res = (res + rotation) % 360
+	
+	return
 }
 ```

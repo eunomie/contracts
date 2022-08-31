@@ -6,28 +6,35 @@ import (
 )
 
 type (
+	// Check returns a bool indicating if the condition is good and an error message if needed.
 	Check func() (bool, string)
 
 	Logger interface {
 		Panic(...any)
 	}
 
-	EmptyLogger struct{}
+	PanicOnlyLogger struct{}
 
-	StdLogger struct{}
+	StdPanicLogger struct{}
+
+	NoPanicLogger struct{}
 )
 
 var (
-	logger Logger = StdLogger{}
+	logger Logger = StdPanicLogger{}
 )
 
-func (l EmptyLogger) Panic(v ...any) {
+func (l PanicOnlyLogger) Panic(v ...any) {
 	s := fmt.Sprint(v...)
 	panic(s)
 }
 
-func (l StdLogger) Panic(v ...any) {
+func (l StdPanicLogger) Panic(v ...any) {
 	log.Panic(v...)
+}
+
+func (l NoPanicLogger) Panic(v ...any) {
+	log.Print(v...)
 }
 
 func SetLogger(l Logger) {
@@ -42,10 +49,18 @@ func runChecks(checks ...Check) {
 	}
 }
 
+// Requires verify a list of conditions are all good and panic if that's not the case.
+// contracts.Requires is intended to be used to verify pre-conditions on input values.
+//
+//	contracts.Requires(ctype.IsNotNil(inputValue)
 func Requires(checks ...Check) {
 	runChecks(checks...)
 }
 
+// Ensure verify a list of conditions are all good and panic if that's not the case.
+// contract.Ensure is intended to be used to verify post-conditions on returning values.
+//
+//	defer contracts.Ensure(ctype.IsNotNil(returnValue))
 func Ensure(checks ...Check) {
 	runChecks(checks...)
 }
